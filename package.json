@@ -1,0 +1,119 @@
+{
+  "name": "minecraft-manager",
+  "version": "1.5.0",
+  "description": "Minecraft Server Manager — host, manage, and share servers without touching a terminal",
+  "main": "dist/main/index.js",
+  "homepage": "./",
+  "author": "EthanolGasYummy",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:main\" \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev:main": "tsc -p tsconfig.main.json --watch",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .",
+    "build": "npm run build:main && npm run build:renderer",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:renderer": "vite build",
+    "start": "cross-env NODE_ENV=production electron .",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "dependencies": {
+    "@types/tar": "^6.1.13",
+    "archiver": "^7.0.1",
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.9",
+    "extract-zip": "^2.0.1",
+    "nat-upnp": "^1.1.1",
+    "node-fetch": "^3.3.2",
+    "systeminformation": "^5.23.5",
+    "tar": "^7.5.16",
+    "tree-kill": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/archiver": "^6.0.3",
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^31.0.1",
+    "electron-builder": "^24.13.3",
+    "framer-motion": "^11.2.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.24.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "wait-on": "^9.0.10",
+    "zustand": "^4.5.2"
+  },
+  "build": {
+    "appId": "com.minecraftmanager.app",
+    "productName": "Minecraft Manager",
+    "publish": {
+      "provider": "github",
+      "owner": "EthanolGasYummy",
+      "repo": "Minecraft-Manager"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/",
+        "to": "resources/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "resources/icon.icns"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "resources/icon.png"
+    }
+  }
+}
